@@ -9,4 +9,5 @@ RUN go build -o /go/bin/app
 
 FROM gcr.io/distroless/base
 COPY --from=build-env /go/bin/app /
+COPY ./db/migrations /migrations
 CMD ["/app"]

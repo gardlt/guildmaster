@@ -7,11 +7,14 @@ import (
 	"net/http"
 	"os"
 
-	store "baiten.io/genbo/pkg/store"
-
+	"github.com/golang-migrate/migrate/v4"
+	"github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/gorilla/mux"
 	_ "github.com/lib/pq"
 	log "github.com/sirupsen/logrus"
+
+	store "baiten.io/genbo/pkg/store"
 )
 
 type App struct {
@@ -46,6 +49,10 @@ func (a *App) initDB(env *Env) {
 		log.Error(err)
 		panic(err)
 	}
+
+	driver, _ := postgres.WithInstance(a.DB, &postgres.Config{})
+	m, _ := migrate.NewWithDatabaseInstance("file:///migrations", "postgres", driver)
+	m.Steps(2)
 }
 
 func (a *App) Initialize(env *Env) {

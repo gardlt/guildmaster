@@ -2,7 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"os"
@@ -14,7 +13,9 @@ import (
 	_ "github.com/lib/pq"
 	log "github.com/sirupsen/logrus"
 
-	store "baiten.io/genbo/pkg/store"
+	"baiten.io/genbo/pkg/common"
+	owner "baiten.io/genbo/pkg/owner"
+	"baiten.io/genbo/pkg/store"
 )
 
 type App struct {
@@ -32,8 +33,7 @@ func (a *App) getHealth(w http.ResponseWriter, r *http.Request) {
 	if err := a.DB.Ping(); err != nil {
 		healthResponse.Pg = "DOWN"
 	}
-	w.WriteHeader(200)
-	json.NewEncoder(w).Encode(&healthResponse)
+	common.RespondWithJSON(w, http.StatusOK, &healthResponse)
 }
 
 func (a *App) initRoutes() {
@@ -59,6 +59,7 @@ func (a *App) Initialize(env *Env) {
 	a.initDB(env)
 	a.initRoutes()
 	store.StoreInit(a.DB, a.Router)
+	owner.OwnerInit(a.DB, a.Router)
 }
 
 func (a *App) Run(addr string) {

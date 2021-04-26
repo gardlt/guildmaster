@@ -1,4 +1,4 @@
-version: "3"
+version: "3.9"
 
 services:
   db:
@@ -11,6 +11,8 @@ services:
       POSTGRES_DB: genbo
   genbo:
     image: baiten.io/genbo:alpha
+    depends_on:
+      - db
     ports:
       - 8000:8000
     environment:

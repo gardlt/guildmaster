@@ -1,0 +1,17 @@
+kind: baiten.io/genbo/store:alpha
+
+metadata:
+  name: potato-store
+
+spec:
+  name: potato-store
+  owner:
+    name: La Papa
+  information:
+    address: 1313 Mocking Bird Lane
+    phone_number: 555-555-5521
+    email: support@potato-store.com
+    timezone: America/Chicago
+  settings:
+    currency: USD
+    language: EN

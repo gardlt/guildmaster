@@ -10,13 +10,17 @@ type StoreService struct {
 	db *sql.DB
 }
 
-func (s *StoreService) GetStoreByName(name string) Store {
+func (s *StoreService) getStoreByName(name string) Store {
 
 	store := Store{}
 
-	if err := s.db.QueryRow("SELECT * FROM  public.store WHERE id=$1", name).Scan(&store.Name); err != nil {
+	if err := s.db.QueryRow("SELECT * FROM  genbo.stores WHERE id=$1", name).Scan(&store.Name); err != nil {
 		log.Error(err)
 	}
 
 	return store
+}
+
+func (s *StoreService) createStore(name string) error {
+	return nil
 }
